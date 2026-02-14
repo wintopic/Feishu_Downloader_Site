@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="飞书导出助手 - 一键导出飞书文档为Markdown格式，支持图片本地化保存的开源Chrome扩展">
+  <meta name="keywords" content="飞书,导出,Markdown,Chrome扩展,文档导出,图片下载">
+  <meta name="author" content="Feishu Export Team">
+  <meta property="og:title" content="飞书导出助手 - Markdown一键导出">
+  <meta property="og:description" content="一键导出飞书文档为Markdown格式，支持图片本地化保存">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary_large_image">
+  <title>飞书导出助手 - Markdown一键导出</title>
+  <link rel="icon" type="image/png" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect fill='%231A1A1A' rx='20' width='100' height='100'/><text y='.9em' font-size='80' x='50%' text-anchor='middle'>📄</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <nav class="nav" id="nav">
+    <div class="nav-container">
+      <a href="#" class="nav-brand">
+        <div class="nav-logo">
+          <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg">
+            <path d="M224 421.12v6.912l0.512 180.224-0.256 35.84 0.256 15.36 0.256 5.376 0.512 3.584v0.512c0 0.256 0 0.512 0.256 0.768 1.024 4.352 3.584 7.936 7.424 11.52 3.328 3.072 7.424 5.632 13.824 9.216 30.464 16.64 59.648 28.928 89.6 37.376 30.72 8.704 62.72 13.312 97.024 14.08 35.584 0.768 68.608-2.816 100.864-11.264 30.976-7.936 61.696-19.968 94.208-36.864 24.064-12.544 50.432-32.256 74.496-55.552l8.448-8.448 8.192-8.704 3.328-3.84-1.792 1.024-6.912 3.584-2.56 1.28c-27.136 12.544-55.296 16.128-86.784 12.288l-9.472-1.28-9.472-1.792-2.304-0.512-2.304-0.512-9.984-2.304-2.56-0.768-2.816-0.768-11.52-3.328-2.048-0.512c-1.28-0.512-2.816-0.768-4.096-1.28l-20.992-6.656-10.24-3.328-29.952-10.752-14.848-5.632-13.568-4.608-6.656-2.816-7.168-3.328-0.768-0.256c-0.768-0.256-1.28-0.768-2.048-1.28l-9.728-4.864-25.344-12.032-15.872-7.936-5.632-3.072c-28.416-14.848-56.32-32.768-84.224-52.992-26.88-19.712-53.504-41.728-80.128-66.048l-13.312-12.544-3.84-3.072z" fill="currentColor"/>
+            <path d="M760.32 413.952l-9.984 0.256-3.84 0.256c-15.104 0.768-30.208 3.328-44.8 7.168-13.312 3.584-26.368 8.448-38.912 14.848-12.8 6.4-24.832 13.824-36.096 22.528l-6.4 4.864-1.536 1.28-1.536 1.28-6.144 5.376-6.4 5.888-7.168 6.656-33.792 32.768-2.304 2.048c-16.384 15.36-28.416 25.6-42.496 35.328l-5.632 3.84-14.592 9.472-2.048 1.28c-2.816 1.792-5.376 3.328-7.936 4.864l-7.424 4.096 10.752 4.352 31.488 11.776 19.456 6.912 22.016 7.168 12.544 3.84 11.008 3.072 2.56 0.768c2.56 0.768 5.12 1.28 7.424 1.792l9.472 2.048 2.304 0.512 2.304 0.512 8.96 1.536 2.304 0.256 2.304 0.256c29.696 3.584 56.064 0 81.408-12.288 32.512-15.616 47.872-31.744 69.12-70.912l6.912-13.056 11.008-21.504 4.864-9.216 1.536-2.816c14.848-28.16 26.112-45.312 41.472-61.184l1.536-1.536-3.584-1.28-4.352-1.536-9.216-3.072-7.936-2.304-3.584-1.024c-14.592-3.584-29.696-5.888-44.8-6.4l-10.24-0.768zM328.96 276.992l8.704 6.4 12.544 9.216 5.12 3.84c14.08 10.752 27.904 21.76 41.472 33.28 18.944 16.384 36.864 33.792 54.016 52.224 15.872 16.896 29.696 32.768 42.24 48.384 9.984 12.288 19.456 24.832 28.672 37.888l10.752 15.872 17.408 27.904 11.008-10.24 16.64-15.872 9.472-8.96 12.544-11.52 2.816-2.56c7.936-7.168 16.384-13.824 24.832-20.224 6.912-5.12 15.104-10.24 24.32-15.104 6.4-3.328 12.8-6.4 19.456-9.216l11.008-4.352 5.888-2.048-0.256-0.768-0.256-1.28c-1.28-5.376-3.584-12.288-6.912-20.224l-4.352-10.752-1.024-2.304c-6.912-15.872-15.104-32.256-21.248-42.496l-12.544-19.2-6.912-9.984-1.28-1.536c-9.216-12.8-16.64-20.736-22.784-23.552-4.096-2.048-7.936-2.56-14.336-2.816H328.96z" fill="currentColor"/>
+          </svg>
+        </div>
+        <span class="nav-title">飞书导出助手</span>
+      </a>
+      <div class="nav-links" id="navLinks">
+        <a href="#features" class="nav-link">功能特性</a>
+        <a href="#guide" class="nav-link">使用指南</a>
+        <a href="#tech" class="nav-link">技术亮点</a>
+        <a href="#changelog" class="nav-link">更新日志</a>
+        <a href="#download" class="nav-link nav-link-primary">立即下载</a>
+      </div>
+      <button class="nav-toggle" id="navToggle" aria-label="菜单">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+  </nav>
+
+  <main>
+    <section class="hero" id="hero">
+      <div class="hero-bg">
+        <div class="hero-gradient"></div>
+        <div class="hero-pattern"></div>
+      </div>
+      <div class="hero-container">
+        <div class="hero-content">
+          <div class="hero-badge">
+            <span class="badge-dot"></span>
+            开源免费 · 持续更新
+          </div>
+          <h1 class="hero-title">
+            飞书文档<br>
+            <span class="hero-title-accent">一键导出</span>
+          </h1>
+          <p class="hero-desc">
+            将飞书文档完美转换为 Markdown 格式，<br class="hero-desc-br">
+            图片自动本地化保存，让知识管理更自由
+          </p>
+          <div class="hero-actions">
+            <a href="#download" class="btn btn-primary btn-lg">
+              <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                <polyline points="7 10 12 15 17 10"/>
+                <line x1="12" y1="15" x2="12" y2="3"/>
+              </svg>
+              立即下载
+            </a>
+            <a href="https://github.com/wintopic/Feishu_Downloader" target="_blank" class="btn btn-secondary btn-lg">
+              <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M9 19c-5 1.5-5-2.5-7-2.5M16 22v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/>
+              </svg>
+              查看源码
+            </a>
+          </div>
+          <div class="hero-stats">
+            <div class="stat-item">
+              <span class="stat-value">H1-H9</span>
+              <span class="stat-label">标题支持</span>
+            </div>
+            <div class="stat-divider"></div>
+            <div class="stat-item">
+              <span class="stat-value">15+</span>
+              <span class="stat-label">格式元素</span>
+            </div>
+            <div class="stat-divider"></div>
+            <div class="stat-item">
+              <span class="stat-value">100%</span>
+              <span class="stat-label">本地运行</span>
+            </div>
+          </div>
+        </div>
+        <div class="hero-visual">
+          <div class="demo-window">
+            <div class="demo-titlebar">
+              <div class="demo-dots">
+                <span class="dot dot-close"></span>
+                <span class="dot dot-minimize"></span>
+                <span class="dot dot-maximize"></span>
+              </div>
+              <span class="demo-title">飞书导出助手</span>
+            </div>
+            <div class="demo-content">
+              <div class="demo-header">
+                <div class="demo-icon">
+                  <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M224 421.12v6.912l0.512 180.224-0.256 35.84 0.256 15.36 0.256 5.376 0.512 3.584v0.512c0 0.256 0 0.512 0.256 0.768 1.024 4.352 3.584 7.936 7.424 11.52 3.328 3.072 7.424 5.632 13.824 9.216 30.464 16.64 59.648 28.928 89.6 37.376 30.72 8.704 62.72 13.312 97.024 14.08 35.584 0.768 68.608-2.816 100.864-11.264 30.976-7.936 61.696-19.968 94.208-36.864 24.064-12.544 50.432-32.256 74.496-55.552l8.448-8.448 8.192-8.704 3.328-3.84-1.792 1.024-6.912 3.584-2.56 1.28c-27.136 12.544-55.296 16.128-86.784 12.288l-9.472-1.28-9.472-1.792-2.304-0.512-2.304-0.512-9.984-2.304-2.56-0.768-2.816-0.768-11.52-3.328-2.048-0.512c-1.28-0.512-2.816-0.768-4.096-1.28l-20.992-6.656-10.24-3.328-29.952-10.752-14.848-5.632-13.568-4.608-6.656-2.816-7.168-3.328-0.768-0.256c-0.768-0.256-1.28-0.768-2.048-1.28l-9.728-4.864-25.344-12.032-15.872-7.936-5.632-3.072c-28.416-14.848-56.32-32.768-84.224-52.992-26.88-19.712-53.504-41.728-80.128-66.048l-13.312-12.544-3.84-3.072z" fill="currentColor"/>
+                    <path d="M760.32 413.952l-9.984 0.256-3.84 0.256c-15.104 0.768-30.208 3.328-44.8 7.168-13.312 3.584-26.368 8.448-38.912 14.848-12.8 6.4-24.832 13.824-36.096 22.528l-6.4 4.864-1.536 1.28-1.536 1.28-6.144 5.376-6.4 5.888-7.168 6.656-33.792 32.768-2.304 2.048c-16.384 15.36-28.416 25.6-42.496 35.328l-5.632 3.84-14.592 9.472-2.048 1.28c-2.816 1.792-5.376 3.328-7.936 4.864l-7.424 4.096 10.752 4.352 31.488 11.776 19.456 6.912 22.016 7.168 12.544 3.84 11.008 3.072 2.56 0.768c2.56 0.768 5.12 1.28 7.424 1.792l9.472 2.048 2.304 0.512 2.304 0.512 8.96 1.536 2.304 0.256 2.304 0.256c29.696 3.584 56.064 0 81.408-12.288 32.512-15.616 47.872-31.744 69.12-70.912l6.912-13.056 11.008-21.504 4.864-9.216 1.536-2.816c14.848-28.16 26.112-45.312 41.472-61.184l1.536-1.536-3.584-1.28-4.352-1.536-9.216-3.072-7.936-2.304-3.584-1.024c-14.592-3.584-29.696-5.888-44.8-6.4l-10.24-0.768zM328.96 276.992l8.704 6.4 12.544 9.216 5.12 3.84c14.08 10.752 27.904 21.76 41.472 33.28 18.944 16.384 36.864 33.792 54.016 52.224 15.872 16.896 29.696 32.768 42.24 48.384 9.984 12.288 19.456 24.832 28.672 37.888l10.752 15.872 17.408 27.904 11.008-10.24 16.64-15.872 9.472-8.96 12.544-11.52 2.816-2.56c7.936-7.168 16.384-13.824 24.832-20.224 6.912-5.12 15.104-10.24 24.32-15.104 6.4-3.328 12.8-6.4 19.456-9.216l11.008-4.352 5.888-2.048-0.256-0.768-0.256-1.28c-1.28-5.376-3.584-12.288-6.912-20.224l-4.352-10.752-1.024-2.304c-6.912-15.872-15.104-32.256-21.248-42.496l-12.544-19.2-6.912-9.984-1.28-1.536c-9.216-12.8-16.64-20.736-22.784-23.552-4.096-2.048-7.936-2.56-14.336-2.816H328.96z" fill="currentColor"/>
+                  </svg>
+                </div>
+                <div class="demo-brand">
+                  <div class="demo-brand-title">飞书导出助手</div>
+                  <div class="demo-brand-sub">Markdown 一键导出</div>
+                </div>
+              </div>
+              <div class="demo-action">
+                <button class="demo-btn">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                    <polyline points="7 10 12 15 17 10"/>
+                    <line x1="12" y1="15" x2="12" y2="3"/>
+                  </svg>
+                  导出当前文档
+                </button>
+                <p class="demo-hint">支持导出为 Markdown，图片自动保存</p>
+              </div>
+              <div class="demo-links">
+                <a href="#guide" class="demo-link">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"/>
+                    <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
+                    <line x1="12" y1="17" x2="12.01" y2="17"/>
+                  </svg>
+                  使用指南
+                </a>
+                <a href="https://github.com/wintopic/Feishu_Downloader/issues" target="_blank" class="demo-link">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/>
+                  </svg>
+                  问题反馈
+                </a>
+                <a href="https://github.com/wintopic/Feishu_Downloader" target="_blank" class="demo-link">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M9 19c-5 1.5-5-2.5-7-2.5M16 22v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/>
+                  </svg>
+                  GitHub
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="hero-scroll">
+        <span>向下滚动探索更多</span>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polyline points="6 9 12 15 18 9"/>
+        </svg>
+      </div>
+    </section>
+
+    <section class="features" id="features">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-tag">功能特性</span>
+          <h2 class="section-title">为知识管理而生</h2>
+          <p class="section-desc">精心设计的功能，让飞书文档导出变得简单而优雅</p>
+        </div>
+        <div class="features-grid">
+          <div class="feature-card feature-card-large">
+            <div class="feature-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                <polyline points="14 2 14 8 20 8"/>
+                <line x1="16" y1="13" x2="8" y2="13"/>
+                <line x1="16" y1="17" x2="8" y2="17"/>
+                <polyline points="10 9 9 9 8 9"/>
+              </svg>
+            </div>
+            <h3 class="feature-title">一键导出 Markdown</h3>
+            <p class="feature-desc">点击按钮即可将飞书文档转换为标准 Markdown 格式，保留完整的文档结构和格式信息</p>
+            <div class="feature-tags">
+              <span class="feature-tag">标准格式</span>
+              <span class="feature-tag">完整保留</span>
+            </div>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                <circle cx="8.5" cy="8.5" r="1.5"/>
+                <polyline points="21 15 16 10 5 21"/>
+              </svg>
+            </div>
+            <h3 class="feature-title">图片本地化</h3>
+            <p class="feature-desc">自动下载文档中的所有图片，并替换为本地相对路径，实现真正的离线可用</p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <polyline points="4 17 10 11 4 5"/>
+                <line x1="12" y1="19" x2="20" y2="19"/>
+              </svg>
+            </div>
+            <h3 class="feature-title">完整内容抓取</h3>
+            <p class="feature-desc">智能滚动页面，确保长文档也能完整导出，不遗漏任何内容</p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/>
+              </svg>
+            </div>
+            <h3 class="feature-title">灵活保存模式</h3>
+            <p class="feature-desc">支持浏览器默认下载或自选文件夹保存，满足不同使用习惯</p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <circle cx="12" cy="12" r="10"/>
+                <polyline points="12 6 12 12 16 14"/>
+              </svg>
+            </div>
+            <h3 class="feature-title">实时进度展示</h3>
+            <p class="feature-desc">可视化抓取进度，随时了解导出状态，支持手动停止操作</p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+              </svg>
+            </div>
+            <h3 class="feature-title">隐私安全</h3>
+            <p class="feature-desc">所有操作均在本地完成，无需上传数据到任何服务器，保护您的隐私</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="formats" id="formats">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-tag">格式支持</span>
+          <h2 class="section-title">丰富的文档元素支持</h2>
+          <p class="section-desc">全面支持飞书文档中的各种格式元素</p>
+        </div>
+        <div class="formats-grid">
+          <div class="format-item">
+            <div class="format-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="4" y1="6" x2="20" y2="6"/>
+                <line x1="4" y1="12" x2="14" y2="12"/>
+              </svg>
+            </div>
+            <span class="format-name">标题 H1-H9</span>
+            <span class="format-check">✓</span>
+          </div>
+          <div class="format-item">
+            <div class="format-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="4" y1="8" x2="20" y2="8"/>
+                <line x1="4" y1="16" x2="20" y2="16"/>
+              </svg>
+            </div>
+            <span class="format-name">段落文本</span>
+            <span class="format-check">✓</span>
+          </div>
+          <div class="format-item">
+            <div class="format-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M6 4h8a4 4 0 0 1 4 4 4 4 0 0 1-4 4H6z"/>
+                <path d="M6 12h9a4 4 0 0 1 4 4 4 4 0 0 1-4 4H6z"/>
+              </svg>
+            </div>
+            <span class="format-name">加粗 / 斜体</span>
+            <span class="format-check">✓</span>
+          </div>
+          <div class="format-item">
+            <div class="format-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="16 18 22 12 16 6"/>
+                <polyline points="8 6 2 12 8 18"/>
+              </svg>
+            </div>
+            <span class="format-name">行内代码</span>
+            <span class="format-check">✓</span>
+          </div>
+          <div class="format-item">
+            <div class="format-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/>
+                <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>
+              </svg>
+            </div>
+            <span class="format-name">链接</span>
+            <span class="format-check">✓</span>
+          </div>
+          <div class="format-item">
+            <div class="format-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                <circle cx="8.5" cy="8.5" r="1.5"/>
+                <polyline points="21 15 16 10 5 21"/>
+              </svg>
+            </div>
+            <span class="format-name">图片</span>
+            <span class="format-check">✓</span>
+          </div>
+          <div class="format-item">
+            <div class="format-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="8" y1="6" x2="21" y2="6"/>
+                <line x1="8" y1="12" x2="21" y2="12"/>
+                <line x1="8" y1="18" x2="21" y2="18"/>
+                <line x1="3" y1="6" x2="3.01" y2="6"/>
+                <line x1="3" y1="12" x2="3.01" y2="12"/>
+                <line x1="3" y1="18" x2="3.01" y2="18"/>
+              </svg>
+            </div>
+            <span class="format-name">无序 / 有序列表</span>
+            <span class="format-check">✓</span>
+          </div>
+          <div class="format-item">
+            <div class="format-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="5" width="6" height="3"/>
+                <rect x="3" y="11" width="6" height="3"/>
+                <rect x="15" y="5" width="6" height="3"/>
+                <rect x="15" y="11" width="6" height="3"/>
+                <rect x="9" y="17" width="6" height="3"/>
+              </svg>
+            </div>
+            <span class="format-name">待办事项</span>
+            <span class="format-check">✓</span>
+          </div>
+          <div class="format-item">
+            <div class="format-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M3 3h18v18H3z"/>
+                <path d="M3 9h18"/>
+                <path d="M9 3v18"/>
+              </svg>
+            </div>
+            <span class="format-name">表格</span>
+            <span class="format-check">✓</span>
+          </div>
+          <div class="format-item">
+            <div class="format-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="16 18 22 12 16 6"/>
+                <polyline points="8 6 2 12 8 18"/>
+              </svg>
+            </div>
+            <span class="format-name">代码块</span>
+            <span class="format-check">✓</span>
+          </div>
+          <div class="format-item">
+            <div class="format-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M3 21c3 0 7-1 7-8V5c0-1.25-.756-2.017-2-2H4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 .008-1 1.031V21"/>
+                <path d="M15 21c3 0 7-1 7-8V5c0-1.25-.757-2.017-2-2h-4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2h.75c0 2.25.25 4-2.75 4v3"/>
+              </svg>
+            </div>
+            <span class="format-name">引用块</span>
+            <span class="format-check">✓</span>
+          </div>
+          <div class="format-item">
+            <div class="format-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"/>
+                <line x1="12" y1="16" x2="12" y2="12"/>
+                <line x1="12" y1="8" x2="12.01" y2="8"/>
+              </svg>
+            </div>
+            <span class="format-name">高亮块 Callout</span>
+            <span class="format-check">✓</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="guide" id="guide">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-tag">使用指南</span>
+          <h2 class="section-title">三步开始使用</h2>
+          <p class="section-desc">简单几步，即可开始导出您的飞书文档</p>
+        </div>
+        <div class="guide-steps">
+          <div class="guide-step">
+            <div class="step-number">01</div>
+            <div class="step-content">
+              <h3 class="step-title">安装扩展</h3>
+              <p class="step-desc">下载源码后，在 Chrome 浏览器中打开 <code>chrome://extensions/</code>，开启开发者模式，点击"加载已解压的扩展程序"选择项目文件夹</p>
+            </div>
+            <div class="step-visual">
+              <div class="step-card">
+                <div class="step-card-header">
+                  <span class="step-card-dot"></span>
+                  <span class="step-card-dot"></span>
+                  <span class="step-card-dot"></span>
+                </div>
+                <div class="step-card-content">
+                  <div class="step-toggle">
+                    <span class="toggle-label">开发者模式</span>
+                    <span class="toggle-switch active"></span>
+                  </div>
+                  <div class="step-btn-mock">加载已解压的扩展程序</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="guide-step">
+            <div class="step-number">02</div>
+            <div class="step-content">
+              <h3 class="step-title">打开文档</h3>
+              <p class="step-desc">在浏览器中打开任意飞书文档页面，支持 <code>feishu.cn/docx/</code> 和 <code>feishu.cn/wiki/</code> 两种类型</p>
+            </div>
+            <div class="step-visual">
+              <div class="step-card">
+                <div class="step-card-header">
+                  <span class="step-card-dot"></span>
+                  <span class="step-card-dot"></span>
+                  <span class="step-card-dot"></span>
+                </div>
+                <div class="step-card-content step-card-url">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                    <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                  </svg>
+                  <span>feishu.cn/docx/...</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="guide-step">
+            <div class="step-number">03</div>
+            <div class="step-content">
+              <h3 class="step-title">一键导出</h3>
+              <p class="step-desc">点击工具栏中的扩展图标，然后点击"导出当前文档"按钮，等待自动滚动抓取完成即可</p>
+            </div>
+            <div class="step-visual">
+              <div class="step-card">
+                <div class="step-card-header">
+                  <span class="step-card-dot"></span>
+                  <span class="step-card-dot"></span>
+                  <span class="step-card-dot"></span>
+                </div>
+                <div class="step-card-content">
+                  <div class="step-export-btn">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                      <polyline points="7 10 12 15 17 10"/>
+                      <line x1="12" y1="15" x2="12" y2="3"/>
+                    </svg>
+                    导出当前文档
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="guide-output">
+          <div class="output-header">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/>
+            </svg>
+            <span>导出目录结构</span>
+          </div>
+          <div class="output-tree">
+            <div class="tree-item tree-folder">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/>
+              </svg>
+              <span>文档标题/</span>
+            </div>
+            <div class="tree-item tree-file">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                <polyline points="14 2 14 8 20 8"/>
+              </svg>
+              <span>文档标题.md</span>
+            </div>
+            <div class="tree-item tree-folder">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/>
+              </svg>
+              <span>assets/</span>
+            </div>
+            <div class="tree-item tree-folder tree-nested">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/>
+              </svg>
+              <span>images/</span>
+            </div>
+            <div class="tree-item tree-file tree-nested-2">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                <circle cx="8.5" cy="8.5" r="1.5"/>
+                <polyline points="21 15 16 10 5 21"/>
+              </svg>
+              <span>image_001.png</span>
+            </div>
+            <div class="tree-item tree-file tree-nested-2">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                <circle cx="8.5" cy="8.5" r="1.5"/>
+                <polyline points="21 15 16 10 5 21"/>
+              </svg>
+              <span>image_002.jpg</span>
+            </div>
+            <div class="tree-item tree-file tree-nested-2">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                <circle cx="8.5" cy="8.5" r="1.5"/>
+                <polyline points="21 15 16 10 5 21"/>
+              </svg>
+              <span>...</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="tech" id="tech">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-tag">技术亮点</span>
+          <h2 class="section-title">现代技术架构</h2>
+          <p class="section-desc">采用最新的 Chrome Extension 技术，确保安全、高效、稳定</p>
+        </div>
+        <div class="tech-grid">
+          <div class="tech-card">
+            <div class="tech-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <circle cx="12" cy="12" r="10"/>
+                <path d="M12 6v6l4 2"/>
+              </svg>
+            </div>
+            <h3 class="tech-title">Manifest V3</h3>
+            <p class="tech-desc">采用 Chrome 扩展最新标准，符合现代浏览器安全规范，无后台常驻进程，资源占用更低</p>
+          </div>
+          <div class="tech-card">
+            <div class="tech-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/>
+                <line x1="8" y1="21" x2="16" y2="21"/>
+                <line x1="12" y1="17" x2="12" y2="21"/>
+              </svg>
+            </div>
+            <h3 class="tech-title">Content Script</h3>
+            <p class="tech-desc">智能注入飞书页面执行文档解析，与页面完美融合，不干扰正常使用</p>
+          </div>
+          <div class="tech-card">
+            <div class="tech-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/>
+                <polyline points="13 2 13 9 20 9"/>
+              </svg>
+            </div>
+            <h3 class="tech-title">File System Access API</h3>
+            <p class="tech-desc">支持选择本地文件夹直接保存，无需手动整理，文件结构清晰有序</p>
+          </div>
+          <div class="tech-card">
+            <div class="tech-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                <polyline points="7 10 12 15 17 10"/>
+                <line x1="12" y1="15" x2="12" y2="3"/>
+              </svg>
+            </div>
+            <h3 class="tech-title">Chrome Downloads API</h3>
+            <p class="tech-desc">使用浏览器原生下载能力，稳定可靠，支持批量下载和进度追踪</p>
+          </div>
+          <div class="tech-card">
+            <div class="tech-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <polyline points="16 18 22 12 16 6"/>
+                <polyline points="8 6 2 12 8 18"/>
+              </svg>
+            </div>
+            <h3 class="tech-title">智能 Markdown 转换</h3>
+            <p class="tech-desc">自研转换引擎，精准识别飞书文档结构，输出格式规范的标准 Markdown</p>
+          </div>
+          <div class="tech-card">
+            <div class="tech-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+              </svg>
+            </div>
+            <h3 class="tech-title">隐私优先</h3>
+            <p class="tech-desc">所有数据处理均在本地完成，无需联网，不上传任何信息到服务器</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="changelog" id="changelog">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-tag">更新日志</span>
+          <h2 class="section-title">版本历史</h2>
+          <p class="section-desc">持续迭代，不断优化用户体验</p>
+        </div>
+        <div class="changelog-timeline">
+          <div class="changelog-item changelog-item-latest">
+            <div class="changelog-marker">
+              <span class="changelog-dot"></span>
+              <span class="changelog-line"></span>
+            </div>
+            <div class="changelog-content">
+              <div class="changelog-header">
+                <span class="changelog-version">v1.0.0</span>
+                <span class="changelog-date">当前版本</span>
+                <span class="changelog-badge">最新</span>
+              </div>
+              <h3 class="changelog-title">首个正式版本发布</h3>
+              <ul class="changelog-list">
+                <li>支持一键导出飞书文档为 Markdown 格式</li>
+                <li>自动下载文档中的图片并本地化</li>
+                <li>支持两种保存模式：浏览器默认下载和选择文件夹</li>
+                <li>完整的格式支持：标题、列表、表格、代码块、引用等</li>
+                <li>实时进度展示，支持手动停止</li>
+                <li>优雅的玉白墨黑 UI 设计</li>
+              </ul>
+            </div>
+          </div>
+          <div class="changelog-item">
+            <div class="changelog-marker">
+              <span class="changelog-dot"></span>
+              <span class="changelog-line"></span>
+            </div>
+            <div class="changelog-content">
+              <div class="changelog-header">
+                <span class="changelog-version">开发计划</span>
+                <span class="changelog-date">未来</span>
+              </div>
+              <h3 class="changelog-title">即将推出</h3>
+              <ul class="changelog-list">
+                <li>支持更多飞书文档类型</li>
+                <li>批量导出多个文档</li>
+                <li>自定义 Markdown 输出格式</li>
+                <li>导出历史记录管理</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="download" id="download">
+      <div class="container">
+        <div class="download-card">
+          <div class="download-content">
+            <div class="download-icon">
+              <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg">
+                <path d="M224 421.12v6.912l0.512 180.224-0.256 35.84 0.256 15.36 0.256 5.376 0.512 3.584v0.512c0 0.256 0 0.512 0.256 0.768 1.024 4.352 3.584 7.936 7.424 11.52 3.328 3.072 7.424 5.632 13.824 9.216 30.464 16.64 59.648 28.928 89.6 37.376 30.72 8.704 62.72 13.312 97.024 14.08 35.584 0.768 68.608-2.816 100.864-11.264 30.976-7.936 61.696-19.968 94.208-36.864 24.064-12.544 50.432-32.256 74.496-55.552l8.448-8.448 8.192-8.704 3.328-3.84-1.792 1.024-6.912 3.584-2.56 1.28c-27.136 12.544-55.296 16.128-86.784 12.288l-9.472-1.28-9.472-1.792-2.304-0.512-2.304-0.512-9.984-2.304-2.56-0.768-2.816-0.768-11.52-3.328-2.048-0.512c-1.28-0.512-2.816-0.768-4.096-1.28l-20.992-6.656-10.24-3.328-29.952-10.752-14.848-5.632-13.568-4.608-6.656-2.816-7.168-3.328-0.768-0.256c-0.768-0.256-1.28-0.768-2.048-1.28l-9.728-4.864-25.344-12.032-15.872-7.936-5.632-3.072c-28.416-14.848-56.32-32.768-84.224-52.992-26.88-19.712-53.504-41.728-80.128-66.048l-13.312-12.544-3.84-3.072z" fill="currentColor"/>
+                <path d="M760.32 413.952l-9.984 0.256-3.84 0.256c-15.104 0.768-30.208 3.328-44.8 7.168-13.312 3.584-26.368 8.448-38.912 14.848-12.8 6.4-24.832 13.824-36.096 22.528l-6.4 4.864-1.536 1.28-1.536 1.28-6.144 5.376-6.4 5.888-7.168 6.656-33.792 32.768-2.304 2.048c-16.384 15.36-28.416 25.6-42.496 35.328l-5.632 3.84-14.592 9.472-2.048 1.28c-2.816 1.792-5.376 3.328-7.936 4.864l-7.424 4.096 10.752 4.352 31.488 11.776 19.456 6.912 22.016 7.168 12.544 3.84 11.008 3.072 2.56 0.768c2.56 0.768 5.12 1.28 7.424 1.792l9.472 2.048 2.304 0.512 2.304 0.512 8.96 1.536 2.304 0.256 2.304 0.256c29.696 3.584 56.064 0 81.408-12.288 32.512-15.616 47.872-31.744 69.12-70.912l6.912-13.056 11.008-21.504 4.864-9.216 1.536-2.816c14.848-28.16 26.112-45.312 41.472-61.184l1.536-1.536-3.584-1.28-4.352-1.536-9.216-3.072-7.936-2.304-3.584-1.024c-14.592-3.584-29.696-5.888-44.8-6.4l-10.24-0.768zM328.96 276.992l8.704 6.4 12.544 9.216 5.12 3.84c14.08 10.752 27.904 21.76 41.472 33.28 18.944 16.384 36.864 33.792 54.016 52.224 15.872 16.896 29.696 32.768 42.24 48.384 9.984 12.288 19.456 24.832 28.672 37.888l10.752 15.872 17.408 27.904 11.008-10.24 16.64-15.872 9.472-8.96 12.544-11.52 2.816-2.56c7.936-7.168 16.384-13.824 24.832-20.224 6.912-5.12 15.104-10.24 24.32-15.104 6.4-3.328 12.8-6.4 19.456-9.216l11.008-4.352 5.888-2.048-0.256-0.768-0.256-1.28c-1.28-5.376-3.584-12.288-6.912-20.224l-4.352-10.752-1.024-2.304c-6.912-15.872-15.104-32.256-21.248-42.496l-12.544-19.2-6.912-9.984-1.28-1.536c-9.216-12.8-16.64-20.736-22.784-23.552-4.096-2.048-7.936-2.56-14.336-2.816H328.96z" fill="currentColor"/>
+              </svg>
+            </div>
+            <h2 class="download-title">立即开始使用</h2>
+            <p class="download-desc">从 GitHub 下载源码，按照使用指南安装到 Chrome 浏览器</p>
+            <div class="download-actions">
+              <a href="https://github.com/wintopic/Feishu_Downloader" target="_blank" class="btn btn-primary btn-lg">
+                <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M9 19c-5 1.5-5-2.5-7-2.5M16 22v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/>
+                </svg>
+                GitHub 下载
+              </a>
+              <a href="#guide" class="btn btn-secondary btn-lg">
+                <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
+                  <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
+                </svg>
+                查看指南
+              </a>
+            </div>
+            <div class="download-info">
+              <div class="info-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="10"/>
+                  <polyline points="12 6 12 12 16 14"/>
+                </svg>
+                <span>安装时间：约 1 分钟</span>
+              </div>
+              <div class="info-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/>
+                  <line x1="8" y1="21" x2="16" y2="21"/>
+                  <line x1="12" y1="17" x2="12" y2="21"/>
+                </svg>
+                <span>支持 Chrome 88+</span>
+              </div>
+              <div class="info-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                </svg>
+                <span>完全本地运行</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-brand">
+          <div class="footer-logo">
+            <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg">
+              <path d="M224 421.12v6.912l0.512 180.224-0.256 35.84 0.256 15.36 0.256 5.376 0.512 3.584v0.512c0 0.256 0 0.512 0.256 0.768 1.024 4.352 3.584 7.936 7.424 11.52 3.328 3.072 7.424 5.632 13.824 9.216 30.464 16.64 59.648 28.928 89.6 37.376 30.72 8.704 62.72 13.312 97.024 14.08 35.584 0.768 68.608-2.816 100.864-11.264 30.976-7.936 61.696-19.968 94.208-36.864 24.064-12.544 50.432-32.256 74.496-55.552l8.448-8.448 8.192-8.704 3.328-3.84-1.792 1.024-6.912 3.584-2.56 1.28c-27.136 12.544-55.296 16.128-86.784 12.288l-9.472-1.28-9.472-1.792-2.304-0.512-2.304-0.512-9.984-2.304-2.56-0.768-2.816-0.768-11.52-3.328-2.048-0.512c-1.28-0.512-2.816-0.768-4.096-1.28l-20.992-6.656-10.24-3.328-29.952-10.752-14.848-5.632-13.568-4.608-6.656-2.816-7.168-3.328-0.768-0.256c-0.768-0.256-1.28-0.768-2.048-1.28l-9.728-4.864-25.344-12.032-15.872-7.936-5.632-3.072c-28.416-14.848-56.32-32.768-84.224-52.992-26.88-19.712-53.504-41.728-80.128-66.048l-13.312-12.544-3.84-3.072z" fill="currentColor"/>
+              <path d="M760.32 413.952l-9.984 0.256-3.84 0.256c-15.104 0.768-30.208 3.328-44.8 7.168-13.312 3.584-26.368 8.448-38.912 14.848-12.8 6.4-24.832 13.824-36.096 22.528l-6.4 4.864-1.536 1.28-1.536 1.28-6.144 5.376-6.4 5.888-7.168 6.656-33.792 32.768-2.304 2.048c-16.384 15.36-28.416 25.6-42.496 35.328l-5.632 3.84-14.592 9.472-2.048 1.28c-2.816 1.792-5.376 3.328-7.936 4.864l-7.424 4.096 10.752 4.352 31.488 11.776 19.456 6.912 22.016 7.168 12.544 3.84 11.008 3.072 2.56 0.768c2.56 0.768 5.12 1.28 7.424 1.792l9.472 2.048 2.304 0.512 2.304 0.512 8.96 1.536 2.304 0.256 2.304 0.256c29.696 3.584 56.064 0 81.408-12.288 32.512-15.616 47.872-31.744 69.12-70.912l6.912-13.056 11.008-21.504 4.864-9.216 1.536-2.816c14.848-28.16 26.112-45.312 41.472-61.184l1.536-1.536-3.584-1.28-4.352-1.536-9.216-3.072-7.936-2.304-3.584-1.024c-14.592-3.584-29.696-5.888-44.8-6.4l-10.24-0.768zM328.96 276.992l8.704 6.4 12.544 9.216 5.12 3.84c14.08 10.752 27.904 21.76 41.472 33.28 18.944 16.384 36.864 33.792 54.016 52.224 15.872 16.896 29.696 32.768 42.24 48.384 9.984 12.288 19.456 24.832 28.672 37.888l10.752 15.872 17.408 27.904 11.008-10.24 16.64-15.872 9.472-8.96 12.544-11.52 2.816-2.56c7.936-7.168 16.384-13.824 24.832-20.224 6.912-5.12 15.104-10.24 24.32-15.104 6.4-3.328 12.8-6.4 19.456-9.216l11.008-4.352 5.888-2.048-0.256-0.768-0.256-1.28c-1.28-5.376-3.584-12.288-6.912-20.224l-4.352-10.752-1.024-2.304c-6.912-15.872-15.104-32.256-21.248-42.496l-12.544-19.2-6.912-9.984-1.28-1.536c-9.216-12.8-16.64-20.736-22.784-23.552-4.096-2.048-7.936-2.56-14.336-2.816H328.96z" fill="currentColor"/>
+            </svg>
+          </div>
+          <span class="footer-title">飞书导出助手</span>
+        </div>
+        <div class="footer-links">
+          <a href="https://github.com/wintopic/Feishu_Downloader" target="_blank">GitHub</a>
+          <a href="https://github.com/wintopic/Feishu_Downloader/issues" target="_blank">问题反馈</a>
+          <a href="https://github.com/wintopic/Feishu_Downloader/blob/main/LICENSE" target="_blank">MIT License</a>
+        </div>
+        <div class="footer-copyright">
+          <p>© 2026 飞书导出助手. 保留所有权利.</p>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
